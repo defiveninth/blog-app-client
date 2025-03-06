@@ -5,6 +5,7 @@ import { urlCreator } from '@/lib/utils'
 export function useSignIn() {
 	const [isLoading, setIsLoading] = useState<boolean>(false)
 	const [error, setError] = useState<string | null>(null)
+	const router = useRouter()
 
 	const signIn = async (email: string, password: string): Promise<boolean> => {
 		setIsLoading(true)
@@ -22,6 +23,7 @@ export function useSignIn() {
 			if (!response.ok) {
 				throw new Error(data.error || 'Invalid email or password.')
 			}
+			router.push('/')
 			return true
 		} catch (err: any) {
 			setError(err.message || 'An error occurred during sign-in.')
