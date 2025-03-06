@@ -1,4 +1,5 @@
 import { urlCreator } from '@/lib/utils'
+import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
 export function useSignIn() {
@@ -14,6 +15,7 @@ export function useSignIn() {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({ email, password }),
+				credentials: 'include'
 			})
 			const data = await response.json()
 
@@ -65,5 +67,47 @@ export function useCreateAccount() {
 	return {
 		isLoading,
 		createAccount,
+	} as const
+}
+
+export function useActivateAccount() {
+	const [isLoading, setIsLoading] = useState(false)
+	const [error, setError] = useState<string | null>(null)
+	const router = useRouter()
+
+	const activateAccount = async (
+		verifyToken: string,
+		name: string,
+		password: string
+	): Promise<boolean> => {
+		setIsLoading(true)
+		setError(null)
+
+		try {
+			const response = await fetch(urlCreator('auth/verify'), {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ verifyToken, name, password }),
+				credentials: 'include'
+			})
+			const data = await response.json()
+
+			if (!response.ok) {
+				throw new Error(data.error || 'Activation failed. Please try again.')
+			}
+			router.replace('/')
+			return true
+		} catch (err: any) {
+			setError(err.message || 'An unexpected error occurred.')
+			return false
+		} finally {
+			setIsLoading(false)
+		}
+	}
+
+	return {
+		isLoading,
+		error,
+		activateAccount,
 	} as const
 }

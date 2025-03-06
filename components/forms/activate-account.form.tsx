@@ -1,25 +1,36 @@
 "use client"
 
 import type React from "react"
+import { Lock, User } from "lucide-react"
+import { useRouter, useSearchParams } from "next/navigation"
+import { useEffect, useState } from "react"
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { User, Lock } from "lucide-react"
-
+import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
+import { CardFooter } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { CardFooter } from "@/components/ui/card"
-import { Alert, AlertDescription } from "@/components/ui/alert"
+import { useActivateAccount } from '@/actions/auth.actions'
 
-export default function VerifyAccountForm() {
+export default function ActivateAccountForm() {
+	const searchParams = useSearchParams()
 	const router = useRouter()
 	const [name, setName] = useState("")
 	const [password, setPassword] = useState("")
 	const [verifyPassword, setVerifyPassword] = useState("")
 	const [error, setError] = useState("")
 
-	const handleSubmit = (e: React.FormEvent) => {
+	const { activateAccount, error: activatingError, isLoading } = useActivateAccount()
+
+	const verifyToken = searchParams.get('verifytoken') ?? ""
+
+	useEffect(() => {
+		if (!verifyToken) {
+			router.replace('/auth/sign-up')
+		}
+	}, [verifyToken, router])
+
+	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault()
 		setError("")
 
@@ -27,7 +38,8 @@ export default function VerifyAccountForm() {
 			setError("Passwords do not match")
 			return
 		}
-		router.push("/dashboard")
+
+		await activateAccount(verifyToken, name, password)
 	}
 
 	return (
@@ -80,8 +92,8 @@ export default function VerifyAccountForm() {
 					<AlertDescription>{error}</AlertDescription>
 				</Alert>
 			)}
-			<Button className="w-full" type="submit">
-				Verify Account
+			<Button className="w-full" type="submit" disabled={isLoading}>
+				{isLoading ? "Verifying..." : "Verify Account"}
 			</Button>
 			<CardFooter className="px-0 pt-4">
 				<div className="text-center w-full">
@@ -100,4 +112,3 @@ export default function VerifyAccountForm() {
 		</form>
 	)
 }
-
