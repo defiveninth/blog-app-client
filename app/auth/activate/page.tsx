@@ -1,5 +1,6 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import ActivateAccountForm from '@/components/forms/activate-account.form'
+import { Suspense } from 'react'
 
 export default function ActivateAccountPage() {
 	return (
@@ -12,7 +13,9 @@ export default function ActivateAccountPage() {
 					</CardDescription>
 				</CardHeader>
 				<CardContent>
-					<ActivateAccountForm />
+					<Suspense>
+						<ActivateAccountForm />
+					</Suspense>
 				</CardContent>
 			</Card>
 		</div>

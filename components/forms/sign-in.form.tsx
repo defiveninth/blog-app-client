@@ -45,7 +45,7 @@ export default function SignInForm() {
 				</div>
 			</div>
 			{ error && <span className='text-red-500 text-center'>{ error }</span> }
-			<Button className="w-full" type='submit'>
+			<Button className="w-full" type='submit' disabled={isLoading}>
 				{ isLoading ? <Loader2 className='animate-spin' /> : 'Sign In' }
 			</Button>
 			<div className="relative">

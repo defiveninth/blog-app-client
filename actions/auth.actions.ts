@@ -1,6 +1,6 @@
-import { urlCreator } from '@/lib/utils'
-import { useRouter } from 'next/navigation'
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { urlCreator } from '@/lib/utils'
 
 export function useSignIn() {
 	const [isLoading, setIsLoading] = useState<boolean>(false)

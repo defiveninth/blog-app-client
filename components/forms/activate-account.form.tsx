@@ -18,7 +18,7 @@ export default function ActivateAccountForm() {
 	const [name, setName] = useState("")
 	const [password, setPassword] = useState("")
 	const [verifyPassword, setVerifyPassword] = useState("")
-	const [error, setError] = useState("")
+	const [localError, setLocalError] = useState("")
 
 	const { activateAccount, error: activatingError, isLoading } = useActivateAccount()
 
@@ -32,15 +32,17 @@ export default function ActivateAccountForm() {
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault()
-		setError("")
+		setLocalError("")
 
 		if (password !== verifyPassword) {
-			setError("Passwords do not match")
+			setLocalError("Passwords do not match")
 			return
 		}
 
 		await activateAccount(verifyToken, name, password)
 	}
+
+	const errorMessage = localError || activatingError
 
 	return (
 		<form onSubmit={handleSubmit} className="space-y-4">
@@ -87,9 +89,9 @@ export default function ActivateAccountForm() {
 					/>
 				</div>
 			</div>
-			{error && (
+			{errorMessage && (
 				<Alert variant="destructive">
-					<AlertDescription>{error}</AlertDescription>
+					<AlertDescription>{errorMessage}</AlertDescription>
 				</Alert>
 			)}
 			<Button className="w-full" type="submit" disabled={isLoading}>
