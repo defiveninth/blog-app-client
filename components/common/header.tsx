@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import Link from 'next/link'
 import { Search, ChevronDown, LogOut, User, Settings, HomeIcon, Rss, ChartBarStacked } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -27,7 +27,6 @@ import {
 	SheetTrigger,
 } from "@/components/ui/sheet"
 import { useRouter } from 'next/navigation'
-// import useAuth from '@/actions/auth/auth'
 import { validateUsername } from '@/lib/utils'
 import Image from 'next/image'
 import { useAuth } from '@/actions/auth.actions'
@@ -49,7 +48,7 @@ export function Header() {
 							<div className="h-6 w-6 rounded-md">
 								<Image alt='' src={'/vercel.svg'} width={25} height={25} />
 							</div>
-							<span className="font-bold">NextGen</span>
+							<span className="font-bold">QulaqqUp</span>
 						</Link>
 
 						<div className="flex items-center space-x-4">
@@ -145,7 +144,7 @@ export function Header() {
 					<div className="hidden md:flex md:items-center md:justify-between md:w-full">
 						<Link href="/" className="flex items-center space-x-2">
 							<div className="h-6 w-6 bg-blue-500 rounded-md" />
-							<span className="font-bold">NextGen</span>
+							<span className="font-bold">QulaqqUp</span>
 						</Link>
 
 						<NavigationMenu className="hidden md:flex">
