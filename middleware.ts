@@ -5,7 +5,7 @@ export async function middleware(request: NextRequest) {
 	const AUTH = request.cookies.has('authToken')
 	const PATH = request.nextUrl.pathname
 
-	if (PATH.startsWith('/auth') && !AUTH) {
+	if (PATH.startsWith('/auth') && AUTH) {
 		return NextResponse.redirect(new URL('/', request.url))
 	}
 

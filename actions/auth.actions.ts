@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { urlCreator } from '@/lib/utils'
 
@@ -112,4 +112,46 @@ export function useActivateAccount() {
 		error,
 		activateAccount,
 	} as const
+}
+
+interface UserData {
+	id: string
+	username: string
+	email: string
+}
+
+export const useAuth = () => {
+	const [isLoading, setIsLoading] = useState<boolean>(true)
+	const [error, setError] = useState<string>('')
+	const [data, setData] = useState<UserData | null>(null)
+
+	const fetchMyData = async () => {
+		setIsLoading(true)
+		setError('')
+		try {
+			const response = await fetch(urlCreator('auth'), {
+				method: 'GET',
+				headers: { 'Content-Type': 'application/json' },
+				credentials: 'include',
+			})
+
+			if (!response.ok) {
+				const errorData = await response.json()
+				throw new Error(errorData.error || 'Failed to fetch user data.')
+			}
+
+			const userData: UserData = await response.json()
+			setData(userData)
+		} catch (err: unknown) {
+			setError(err instanceof Error ? err.message : 'An unexpected error occurred.')
+		} finally {
+			setIsLoading(false)
+		}
+	}
+
+	useEffect(() => {
+		void fetchMyData()
+	}, [])
+
+	return { isLoading, error, data } as const
 }
