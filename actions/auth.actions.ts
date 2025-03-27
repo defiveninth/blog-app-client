@@ -116,8 +116,12 @@ export function useActivateAccount() {
 
 interface UserData {
 	id: string
+	name: string
 	username: string
 	email: string
+	avatar: string
+	createdAt: string
+	updatedAt: string
 }
 
 export const useAuth = () => {
