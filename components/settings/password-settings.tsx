@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { AlertCircle } from 'lucide-react'
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { useChangePassword } from '@/actions/settings/change-password'
+import { useChangePassword } from '@/actions/user.actions'
 
 export default function ChangePasswordForm() {
 	const [currentPassword, setCurrentPassword] = useState('')
