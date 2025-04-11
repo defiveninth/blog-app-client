@@ -1,9 +1,9 @@
 "use client"
 
+import { useParams, useRouter } from "next/navigation"
+import { useEffect, useState } from "react"
 import type React from "react"
 import { Lock, User } from "lucide-react"
-import { useRouter, useSearchParams } from "next/navigation"
-import { useEffect, useState } from "react"
 
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
@@ -13,7 +13,7 @@ import { Label } from "@/components/ui/label"
 import { useActivateAccount } from '@/actions/auth.actions'
 
 export default function ActivateAccountForm() {
-	const searchParams = useSearchParams()
+	const { verifytoken } = useParams()
 	const router = useRouter()
 	const [name, setName] = useState("")
 	const [password, setPassword] = useState("")
@@ -22,13 +22,12 @@ export default function ActivateAccountForm() {
 
 	const { activateAccount, error: activatingError, isLoading } = useActivateAccount()
 
-	const verifyToken = searchParams.get('verifytoken') ?? ""
-
 	useEffect(() => {
-		if (!verifyToken) {
+		console.log('Verify Token:', verifytoken)
+		if (!verifytoken) {
 			router.replace('/auth/sign-up')
 		}
-	}, [verifyToken, router])
+	}, [verifytoken, router])
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault()
@@ -39,7 +38,7 @@ export default function ActivateAccountForm() {
 			return
 		}
 
-		await activateAccount(verifyToken, name, password)
+		await activateAccount(verifytoken as string, name, password)
 	}
 
 	const errorMessage = localError || activatingError
